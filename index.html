@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <header class="bg-primary text-white p-3">
+      <div class="container d-flex justify-content-between">
+        <h1>Tech Shop</h1>
+        <nav>
+          <a href="index.html" class="text-white mx-2">Home</a>
+          <a href="admin.html" class="text-white mx-2">Admin</a>
+          <button
+            id="login-btn"
+            class="btn btn-light"
+            onclick="loginWithGoogle()"
+          >
+            Đăng nhập Google
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <section class="banner bg-light p-5 text-center">
+      <h2>Banner Sản phẩm Nổi bật</h2>
+      <!-- Bạn có thể thêm carousel Bootstrap cho banner -->
+      <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="banner1.jpg" class="d-block w-100" alt="Banner 1" />
+          </div>
+          <!-- Thêm thêm item từ Firebase nếu cần -->
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="prev"
+        >
+          ...
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="next"
+        >
+          ...
+        </button>
+      </div>
+    </section>
+
+    <section class="products container my-5">
+      <h2>Sản phẩm</h2>
+      <div class="row" id="product-list"></div>
+      <!-- Render từ Firebase -->
+    </section>
+
+    <footer class="bg-dark text-white p-3 text-center">
+      <p>&copy; 2026 Tech Shop. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts như trên -->
+    <script type="module">
+      import { renderProducts } from "./scripts.js";
+      renderProducts("product-list");
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        addDoc,
+        updateDoc,
+        deleteDoc,
+        doc,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+      // ... (sử dụng sau)
+    </script>
+    <script defer src="firebase-config.js" type="module"></script>
+    <!-- Config Firebase -->
+    <script defer src="scripts.js" type="module"></script>
+    <!-- JS logic -->
+  </body>
+</html>
