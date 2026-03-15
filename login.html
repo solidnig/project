@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TechShop — Đăng nhập</title>
+    <title>MeetMe — Đăng nhập</title>
     <link rel="stylesheet" href="auth.css" />
   </head>
   <body>
@@ -12,7 +12,7 @@
     <div class="auth-wrap">
       <!-- Left panel -->
       <div class="auth-left">
-        <div class="auth-brand">TechShop <span>Personal Profile</span></div>
+        <div class="auth-brand">MeetMe <span>Personal Profile</span></div>
         <ul class="auth-features">
           <li>
             <div class="feat-icon">👤</div>
@@ -122,13 +122,13 @@
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
       const firebaseConfig = {
-        apiKey: "AIzaSyD3BCNxZMEQxLcgn9RQkYQU4BvbDF64c_4",
-        authDomain: "meetme-918cd.firebaseapp.com",
-        projectId: "meetme-918cd",
-        storageBucket: "meetme-918cd.firebasestorage.app",
-        messagingSenderId: "83399029367",
-        appId: "1:83399029367:web:e91b867e01ea213e004c72",
-        measurementId: "G-1PRVJCE9GW",
+        apiKey: "AIzaSyB-tBurz5gMYTB2VfU_KvAgO_54lOke9hQ",
+        authDomain: "project-d8beb.firebaseapp.com",
+        projectId: "project-d8beb",
+        storageBucket: "project-d8beb.firebasestorage.app",
+        messagingSenderId: "367976119507",
+        appId: "1:367976119507:web:ef78fe848b4ad45cb6a826",
+        measurementId: "G-ZDNSN02HW8",
       };
 
       const app = initializeApp(firebaseConfig);
@@ -137,7 +137,10 @@
 
       // Đã đăng nhập → vào trang chủ
       onAuthStateChanged(auth, (user) => {
-        if (user) window.location.href = "index.html";
+        // Đã đăng nhập → về trang trước hoặc index
+        const from =
+          new URLSearchParams(location.search).get("from") || "index.html";
+        if (user) window.location.href = from;
       });
 
       const errorEl = document.getElementById("msg-error");

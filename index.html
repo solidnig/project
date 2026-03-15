@@ -181,6 +181,7 @@
     .profile-icon-btn:hover { background: var(--g1); }
     .profile-icon-btn:hover svg { stroke: var(--black); }
     .profile-icon-btn.has-avatar { background: transparent !important; }
+    .profile-icon-btn.active { background: var(--g1); outline: 2px solid var(--blue); outline-offset: 2px; }
     .profile-icon-btn.has-avatar svg { display: none; }
     .profile-icon-btn.has-avatar img { display: block; }
 
@@ -202,7 +203,6 @@
       transition: opacity 0.18s, transform 0.18s;
       z-index: 400;
     }
-    .profile-trigger:hover .profile-dropdown,
     .profile-dropdown.open {
       opacity: 1; pointer-events: all;
       transform: translateY(0) scale(1);
@@ -506,7 +506,7 @@
     <ul class="nav-links">
 
       <li class="nav-item">
-        <a href="#" class="nav-link">
+        <a href="list.html" class="nav-link">
           Điện Thoại
           <svg class="chevron-ico" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
@@ -679,7 +679,7 @@
 
       <!-- RIGHT: product image -->
       <div class="hero-visual">
-        <img src="/png/phone-hero.png" alt="OPPO Find X9 Series" class="hero-phone-img" />
+        <img src="../images/phone-hero.png" alt="OPPO Find X9 Series" class="hero-phone-img" />
 
         <div class="chip-float chip-a">
           <div class="cf-val">50MP</div>
@@ -779,6 +779,33 @@
 
   // ── Sign out ──
   document.getElementById("btn-signout").addEventListener("click", () => signOut(auth));
+
+  // ── Profile dropdown: click to toggle ──
+  const profileBtn      = document.getElementById("profile-icon-btn");
+  const profileDropdown = document.getElementById("profile-dropdown");
+
+  profileBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = profileDropdown.classList.contains("open");
+    profileDropdown.classList.toggle("open");
+    profileBtn.classList.toggle("active", !isOpen);
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!profileDropdown.contains(e.target) && e.target !== profileBtn) {
+      profileDropdown.classList.remove("open");
+      profileBtn.classList.remove("active");
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      profileDropdown.classList.remove("open");
+      profileBtn.classList.remove("active");
+    }
+  });
 
   // ── Search overlay ──
   var overlay = document.getElementById("search-overlay");

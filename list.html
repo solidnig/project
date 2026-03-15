@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Shop — Danh sách sản phẩm</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black:  #0d0d0d;
+      --white:  #ffffff;
+      --g1:     #f6f6f8;
+      --g2:     #e9e9ef;
+      --g3:     #b2b2c0;
+      --g4:     #6b6b7e;
+      --ink:    #1a1a2e;
+      --blue:   #0057ff;
+      --red:    #e53935;
+      --red-lt: #fff0f0;
+      --green:  #16a34a;
+      --orange: #f97316;
+      --nav-h:  58px;
+      --font:   'Be Vietnam Pro', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--ink); background: var(--g1); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ══════════════════════════════
+       TOPBAR
+    ══════════════════════════════ */
+    .topbar {
+      background: var(--black); height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; font-size: 0.75rem;
+      color: rgba(255,255,255,0.6); letter-spacing: 0.03em;
+    }
+    .topbar b { color: rgba(255,255,255,0.92); }
+    .topbar-item { display: flex; align-items: center; gap: 5px; }
+
+    /* ══════════════════════════════
+       NAVBAR
+    ══════════════════════════════ */
+    .navbar {
+      position: sticky; top: 0; z-index: 300;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--g2); height: var(--nav-h);
+    }
+    .nav-wrap {
+      max-width: 1440px; margin: 0 auto; height: 100%;
+      display: flex; align-items: center; padding: 0 40px;
+    }
+    .brand {
+      font-size: 1.3rem; font-weight: 800; letter-spacing: -0.04em;
+      color: var(--black); margin-right: 48px; flex-shrink: 0;
+    }
+    .brand-accent { color: var(--blue); }
+    .nav-links {
+      display: flex; align-items: stretch; height: 100%; flex: 1;
+    }
+    .nav-item { position: relative; display: flex; align-items: center; height: 100%; }
+    .nav-link {
+      display: flex; align-items: center; gap: 3px; padding: 0 15px;
+      font-size: 0.84rem; font-weight: 500; color: var(--g4); height: 100%;
+      white-space: nowrap; transition: color 0.18s; border-bottom: 2px solid transparent;
+    }
+    .nav-link:hover { color: var(--black); }
+    .nav-item:hover > .nav-link { color: var(--black); border-bottom-color: var(--blue); }
+    .chevron-ico {
+      width: 11px; height: 11px; fill: none; stroke: currentColor;
+      stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+      transition: transform 0.2s;
+    }
+    .nav-item:hover .chevron-ico { transform: rotate(180deg); }
+    .dropdown {
+      position: absolute; top: 100%; left: 0;
+      background: var(--white); border: 1px solid var(--g2);
+      border-top: 2px solid var(--blue); border-radius: 0 0 10px 10px;
+      min-width: 200px; box-shadow: 0 16px 48px rgba(0,0,0,0.11);
+      padding: 8px 0; opacity: 0; pointer-events: none;
+      transform: translateY(-4px); transition: opacity 0.18s, transform 0.18s;
+    }
+    .nav-item:hover .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown a {
+      display: flex; align-items: center; gap: 9px; padding: 9px 18px;
+      font-size: 0.83rem; color: var(--g4); transition: all 0.14s;
+    }
+    .dropdown a:hover { background: var(--g1); color: var(--black); padding-left: 24px; }
+    .dropdown-ico { width: 18px; text-align: center; font-size: 0.95rem; }
+    .dropdown hr { border: none; border-top: 1px solid var(--g2); margin: 6px 0; }
+
+    /* Nav right */
+    .nav-right { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+    .icon-btn {
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      border: none; background: none; border-radius: 8px; cursor: pointer;
+      color: var(--g4); transition: all 0.16s; position: relative;
+    }
+    .icon-btn:hover { background: var(--g1); color: var(--black); }
+    .icon-btn svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+    .badge {
+      position: absolute; top: 5px; right: 5px; width: 15px; height: 15px;
+      background: var(--blue); color: white; border-radius: 50%;
+      font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .profile-trigger { position: relative; }
+    .profile-icon-btn {
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      border: none; background: none; border-radius: 50%; cursor: pointer;
+      transition: all 0.16s; overflow: hidden; padding: 0;
+    }
+    .profile-icon-btn img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--g2); display: none; }
+    .profile-icon-btn svg { width: 19px; height: 19px; fill: none; stroke: var(--g4); stroke-width: 1.8; stroke-linecap: round; }
+    .profile-icon-btn:hover { background: var(--g1); }
+    .profile-icon-btn.has-avatar svg { display: none; }
+    .profile-icon-btn.has-avatar img { display: block; }
+    .profile-dropdown {
+      position: absolute; top: calc(100% + 10px); right: 0; width: 240px;
+      background: var(--white); border: 1px solid var(--g2); border-radius: 14px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.13); overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px) scale(0.98); transform-origin: top right;
+      transition: opacity 0.18s, transform 0.18s; z-index: 400;
+    }
+    .profile-dropdown.open { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
+    .pd-user { padding: 16px 18px 12px; border-bottom: 1px solid var(--g2); display: none; }
+    .pd-user.show { display: block; }
+    .pd-user-name { font-size: 0.88rem; font-weight: 700; color: var(--ink); }
+    .pd-user-email { font-size: 0.75rem; color: var(--g3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pd-menu { padding: 6px 0; }
+    .pd-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 18px;
+      font-size: 0.84rem; color: var(--g4); cursor: pointer; transition: all 0.14s;
+      text-decoration: none; border: none; background: none;
+      width: 100%; font-family: var(--font); text-align: left;
+    }
+    .pd-item:hover { background: var(--g1); color: var(--black); }
+    .pd-item.danger:hover { background: #fff0ef; color: #e03030; }
+    .pd-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; flex-shrink: 0; }
+    .pd-divider { border: none; border-top: 1px solid var(--g2); margin: 4px 0; }
+
+    /* Search overlay */
+    .search-overlay {
+      position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px); display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 80px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .search-overlay.open { opacity: 1; pointer-events: all; }
+    .search-box {
+      width: min(600px, 92vw); background: var(--white); border-radius: 16px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2); overflow: hidden;
+      transform: translateY(-12px); transition: transform 0.2s;
+    }
+    .search-overlay.open .search-box { transform: translateY(0); }
+    .search-input-wrap {
+      display: flex; align-items: center; gap: 12px; padding: 16px 20px;
+      border-bottom: 1px solid var(--g2);
+    }
+    .search-input-wrap svg { width: 20px; height: 20px; fill: none; stroke: var(--g3); stroke-width: 2; stroke-linecap: round; flex-shrink: 0; }
+    .search-input { flex: 1; border: none; outline: none; font-size: 1rem; font-family: var(--font); color: var(--ink); }
+    .search-input::placeholder { color: var(--g3); }
+    .search-close {
+      width: 28px; height: 28px; border-radius: 6px; background: var(--g1);
+      border: none; cursor: pointer; font-size: 0.9rem; color: var(--g4);
+      display: flex; align-items: center; justify-content: center; transition: all 0.14s;
+    }
+    .search-close:hover { background: var(--g2); }
+    .search-hints { padding: 14px 20px; }
+    .search-hint-label { font-size: 0.72rem; font-weight: 600; color: var(--g3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .search-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .search-tag {
+      padding: 6px 14px; border-radius: 20px; background: var(--g1);
+      border: 1px solid var(--g2); font-size: 0.8rem; color: var(--g4);
+      cursor: pointer; transition: all 0.14s; font-family: var(--font);
+    }
+    .search-tag:hover { background: var(--blue); border-color: var(--blue); color: white; }
+
+    /* ══════════════════════════════
+       PAGE LAYOUT
+    ══════════════════════════════ */
+    .page-wrap {
+      max-width: 1440px; margin: 0 auto; padding: 0 40px 60px;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 6px;
+      padding: 14px 0; font-size: 0.8rem; color: var(--g3);
+    }
+    .breadcrumb a { color: var(--g3); transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--blue); }
+    .breadcrumb span { color: var(--ink); font-weight: 500; }
+
+    /* Page title row */
+    .page-title-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .page-title {
+      font-size: 1.5rem; font-weight: 800; color: var(--black); letter-spacing: -0.02em;
+    }
+    .product-count { font-size: 0.82rem; color: var(--g3); margin-top: 3px; }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      background: var(--white); border: 1px solid var(--g2); border-radius: 12px;
+      padding: 14px 20px; margin-bottom: 16px;
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    }
+    .filter-label { font-size: 0.78rem; font-weight: 700; color: var(--g4); margin-right: 4px; flex-shrink: 0; }
+    .filter-chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: 20px;
+      border: 1.5px solid var(--g2); background: var(--white);
+      font-size: 0.79rem; font-weight: 500; color: var(--g4);
+      cursor: pointer; transition: all 0.16s; font-family: var(--font);
+      white-space: nowrap;
+    }
+    .filter-chip svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.5; flex-shrink: 0; }
+    .filter-chip:hover { border-color: var(--blue); color: var(--blue); background: #eef3ff; }
+    .filter-chip.active { border-color: var(--blue); color: var(--blue); background: #eef3ff; }
+
+    /* ── Sort bar ── */
+    .sort-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+    }
+    .sort-label { font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+    .sort-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .sort-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 20px;
+      border: 1.5px solid var(--g2); background: var(--white);
+      font-size: 0.8rem; font-weight: 500; color: var(--g4);
+      cursor: pointer; transition: all 0.16s; font-family: var(--font);
+    }
+    .sort-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .sort-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .sort-btn.active { border-color: var(--blue); color: var(--blue); background: #eef3ff; }
+
+    /* ══════════════════════════════
+       PRODUCT GRID
+    ══════════════════════════════ */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    /* Product card */
+    .prod-card {
+      background: var(--white); border: 1px solid var(--g2); border-radius: 12px;
+      overflow: hidden; cursor: pointer; transition: all 0.2s;
+      display: flex; flex-direction: column; position: relative;
+    }
+    .prod-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); border-color: var(--blue); }
+
+    /* Badges row */
+    .prod-badges {
+      position: absolute; top: 10px; left: 10px; right: 10px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      pointer-events: none; z-index: 2;
+    }
+    .badge-discount {
+      background: var(--red); color: white;
+      font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+    }
+    .badge-installment {
+      background: #e8f4ff; color: var(--blue);
+      font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px;
+    }
+
+    /* Image */
+    .prod-img-wrap {
+      width: 100%; aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: var(--white);
+    }
+    .prod-img {
+      width: 100%; height: 100%; object-fit: contain;
+      transition: transform 0.25s;
+    }
+    .prod-card:hover .prod-img { transform: scale(1.05); }
+
+    /* Placeholder image when no image */
+    .prod-img-placeholder {
+      width: 100%; height: 100%; background: var(--g1);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; color: var(--g2);
+    }
+
+    /* Info */
+    .prod-info { padding: 12px 14px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+    .prod-name {
+      font-size: 0.84rem; font-weight: 600; color: var(--ink);
+      line-height: 1.4; display: -webkit-box;
+      -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    /* Status badge (Hàng mới về, etc.) */
+    .prod-status {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 0.69rem; font-weight: 600; width: fit-content;
+    }
+    .prod-status.new   { background: #dcfce7; color: var(--green); }
+    .prod-status.hot   { background: #fff1f0; color: var(--red); }
+    .prod-status.sale  { background: #fff7ed; color: var(--orange); }
+
+    /* Price */
+    .prod-price-row { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+    .prod-price {
+      font-size: 0.95rem; font-weight: 800; color: var(--red);
+      letter-spacing: -0.01em;
+    }
+    .prod-price-old {
+      font-size: 0.76rem; color: var(--g3); text-decoration: line-through;
+    }
+
+    /* Specs chips */
+    .prod-specs { display: flex; flex-wrap: wrap; gap: 5px; }
+    .spec-chip {
+      padding: 2px 8px; border-radius: 4px;
+      background: var(--g1); border: 1px solid var(--g2);
+      font-size: 0.69rem; color: var(--g4); font-weight: 500;
+    }
+
+    /* Smember bar */
+    .prod-smember {
+      background: #eef3ff; border-radius: 4px;
+      padding: 4px 8px; font-size: 0.7rem; color: var(--blue); font-weight: 500;
+    }
+
+    /* Bottom row: stars + wishlist */
+    .prod-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 14px; border-top: 1px solid var(--g2); margin-top: auto;
+    }
+    .prod-stars { display: flex; align-items: center; gap: 3px; font-size: 0.78rem; color: var(--g4); }
+    .star-ico { color: #f59e0b; font-size: 0.8rem; }
+    .prod-wishlist {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.75rem; color: var(--g3); cursor: pointer;
+      background: none; border: none; font-family: var(--font);
+      transition: color 0.15s;
+    }
+    .prod-wishlist:hover { color: var(--red); }
+    .prod-wishlist svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+
+    /* ── Skeleton loader ── */
+    .skeleton { background: linear-gradient(90deg, var(--g1) 25%, var(--g2) 50%, var(--g1) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .skel-card { background: var(--white); border: 1px solid var(--g2); border-radius: 12px; overflow: hidden; }
+    .skel-img   { height: 180px; }
+    .skel-body  { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .skel-line  { height: 12px; border-radius: 6px; }
+    .skel-short { width: 60%; }
+
+    /* ── Empty state ── */
+    .empty-state {
+      grid-column: 1 / -1; text-align: center;
+      padding: 80px 20px; color: var(--g3);
+    }
+    .empty-state .empty-ico { font-size: 3rem; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 1.1rem; font-weight: 600; color: var(--g4); margin-bottom: 8px; }
+    .empty-state p  { font-size: 0.85rem; }
+
+    /* ── Error banner ── */
+    .error-banner {
+      grid-column: 1 / -1;
+      background: #fff0f0; border: 1px solid #fcc; border-radius: 10px;
+      padding: 20px; text-align: center; color: var(--red); font-size: 0.88rem;
+    }
+
+    /* ── Load more ── */
+    .load-more-wrap { display: flex; justify-content: center; margin-top: 32px; }
+    .btn-load-more {
+      padding: 12px 36px; border-radius: 10px;
+      background: var(--white); border: 1.5px solid var(--g2);
+      font-family: var(--font); font-size: 0.88rem; font-weight: 600;
+      color: var(--g4); cursor: pointer; transition: all 0.18s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-load-more:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-load-more:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Admin: Add product ── */
+    .admin-bar {
+      display: none; /* shown when logged in */
+      background: #fffbeb; border: 1px solid #fde68a;
+      border-radius: 10px; padding: 12px 18px;
+      margin-bottom: 18px; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .admin-bar.show { display: flex; }
+    .admin-bar-note { font-size: 0.82rem; color: #92400e; }
+    .btn-add-product {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 8px;
+      background: var(--blue); color: white; border: none;
+      font-size: 0.82rem; font-weight: 600; font-family: var(--font);
+      cursor: pointer; transition: all 0.16s;
+    }
+    .btn-add-product:hover { background: #0047d4; transform: translateY(-1px); }
+
+    /* ── Modal: Add/Edit product ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 600;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white); border-radius: 18px;
+      width: min(560px, 100%); max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.2);
+      transform: translateY(16px); transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header {
+      padding: 22px 28px 18px; border-bottom: 1px solid var(--g2);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+    .modal-close {
+      width: 30px; height: 30px; border-radius: 8px; background: var(--g1);
+      border: none; cursor: pointer; font-size: 1rem; color: var(--g4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { background: var(--g2); color: var(--black); }
+    .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; }
+    .modal-footer { padding: 16px 28px; border-top: 1px solid var(--g2); display: flex; gap: 10px; justify-content: flex-end; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.75rem; font-weight: 600; color: var(--g4); text-transform: uppercase; letter-spacing: 0.07em; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 9px 12px; border: 1.5px solid var(--g2); border-radius: 8px;
+      font-family: var(--font); font-size: 0.88rem; color: var(--ink);
+      outline: none; transition: border-color 0.16s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .btn-modal-save {
+      padding: 10px 24px; border-radius: 8px; background: var(--blue); color: white;
+      border: none; font-family: var(--font); font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.16s;
+    }
+    .btn-modal-save:hover { background: #0047d4; }
+    .btn-modal-save:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-modal-cancel {
+      padding: 10px 20px; border-radius: 8px; background: var(--g1);
+      border: 1px solid var(--g2); font-family: var(--font); font-size: 0.88rem;
+      color: var(--g4); cursor: pointer; transition: all 0.16s;
+    }
+    .btn-modal-cancel:hover { border-color: var(--g3); color: var(--ink); }
+
+    /* Toast */
+    .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast {
+      background: white; border: 1px solid var(--g2); border-radius: 10px;
+      padding: 12px 16px; font-size: 0.84rem; color: var(--ink);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transform: translateX(120%); transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: all; max-width: 300px;
+    }
+    .toast.show { transform: translateX(0); }
+    .toast.success { border-left: 3px solid var(--green); }
+    .toast.error   { border-left: 3px solid var(--red); }
+
+    @media (max-width: 1100px) { .product-grid { grid-template-columns: repeat(4,1fr); } }
+    @media (max-width: 860px)  { .product-grid { grid-template-columns: repeat(3,1fr); } .nav-links { display: none; } }
+    @media (max-width: 600px)  { .product-grid { grid-template-columns: repeat(2,1fr); } .page-wrap { padding: 0 16px 40px; } }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-item">🚚 <b>Miễn phí vận chuyển</b> đơn từ 500K</div>
+  <div class="topbar-item">📞 Hotline: <b>1800 1234</b></div>
+  <div class="topbar-item">🎁 Ưu đãi mới mỗi ngày</div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">Tech<span class="brand-accent">Shop</span></a>
+
+    <ul class="nav-links">
+      <li class="nav-item">
+        <a href="#" class="nav-link">Điện Thoại <svg class="chevron-ico" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <div class="dropdown">
+          <a href="#"><span class="dropdown-ico">📱</span>iPhone</a>
+          <a href="#"><span class="dropdown-ico">🤖</span>Samsung Galaxy</a>
+          <a href="#"><span class="dropdown-ico">🟢</span>OPPO</a>
+          <a href="#"><span class="dropdown-ico">🔵</span>Xiaomi</a>
+          <hr/>
+          <a href="#"><span class="dropdown-ico">🔥</span>Mới nhất</a>
+          <a href="#"><span class="dropdown-ico">💰</span>Dưới 5 triệu</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">Máy Tính Bảng <svg class="chevron-ico" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <div class="dropdown">
+          <a href="#"><span class="dropdown-ico">🍎</span>iPad</a>
+          <a href="#"><span class="dropdown-ico">🤖</span>Samsung Tab</a>
+          <a href="#"><span class="dropdown-ico">🔵</span>Xiaomi Pad</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">Tai Nghe <svg class="chevron-ico" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <div class="dropdown">
+          <a href="#"><span class="dropdown-ico">🎧</span>Chụp tai</a>
+          <a href="#"><span class="dropdown-ico">🎵</span>Nhét tai</a>
+          <a href="#"><span class="dropdown-ico">📻</span>True Wireless</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">Đồng Hồ Thông Minh <svg class="chevron-ico" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <div class="dropdown">
+          <a href="#"><span class="dropdown-ico">⌚</span>Apple Watch</a>
+          <a href="#"><span class="dropdown-ico">🟠</span>Samsung Watch</a>
+          <a href="#"><span class="dropdown-ico">🏃</span>Garmin</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="#" class="nav-link">Phụ kiện</a></li>
+      <li class="nav-item"><a href="#" class="nav-link">Về Tech Shop</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <button class="icon-btn" id="btn-search" title="Tìm kiếm">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+
+      <div class="profile-trigger">
+        <button class="profile-icon-btn" id="profile-icon-btn" title="Tài khoản">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <img src="" alt="" id="nav-avatar" />
+        </button>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <div class="pd-user" id="pd-user">
+            <div class="pd-user-name" id="pd-name"></div>
+            <div class="pd-user-email" id="pd-email"></div>
+          </div>
+          <div class="pd-menu" id="pd-menu-guest" style="display:block">
+            <a href="login.html?from=list.html" class="pd-item">
+              <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              Đăng nhập
+            </a>
+            <a href="register.html" class="pd-item">
+              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+              Đăng ký tài khoản
+            </a>
+          </div>
+          <div class="pd-menu" id="pd-menu-user" style="display:none">
+            <a href="pages/profile.html" class="pd-item">
+              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Chỉnh sửa Profile
+            </a>
+            <hr class="pd-divider"/>
+            <button class="pd-item danger" id="btn-signout">
+              <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Đăng xuất
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="icon-btn" title="Giỏ hàng">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="badge">3</span>
+      </button>
+
+      <button class="icon-btn" style="display:none" id="nav-hamburger" title="Menu">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="search-overlay">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="search-input" placeholder="Tìm kiếm sản phẩm..." id="search-input" />
+      <button class="search-close" id="search-close">✕</button>
+    </div>
+    <div class="search-hints">
+      <div class="search-hint-label">Tìm kiếm phổ biến</div>
+      <div class="search-tags">
+        <button class="search-tag">iPhone 17 Pro</button>
+        <button class="search-tag">Samsung S25</button>
+        <button class="search-tag">AirPods Pro</button>
+        <button class="search-tag">MacBook Air M3</button>
+        <button class="search-tag">Tai nghe Sony</button>
+        <button class="search-tag">Laptop gaming</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ PAGE CONTENT ════════ -->
+<div class="page-wrap">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="index.html">Trang chủ</a>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    <span>Điện Thoại</span>
+  </div>
+
+  <!-- Title + count -->
+  <div class="page-title-row">
+    <div>
+      <div class="page-title">Điện Thoại</div>
+      <div class="product-count" id="product-count">Đang tải...</div>
+    </div>
+  </div>
+
+  <!-- Admin bar (shown when logged in) -->
+  <div class="admin-bar" id="admin-bar">
+    <span class="admin-bar-note">👋 Bạn đang đăng nhập — có thể thêm sản phẩm vào database</span>
+    <button class="btn-add-product" id="btn-open-modal">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Thêm sản phẩm
+    </button>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Lọc theo:</span>
+    <button class="filter-chip active" data-filter="all">Tất cả</button>
+    <button class="filter-chip" data-filter="iphone">
+      iPhone <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-chip" data-filter="samsung">
+      Samsung <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-chip" data-filter="oppo">
+      OPPO <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-chip" data-filter="xiaomi">
+      Xiaomi <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-chip" data-filter="under5m">Dưới 5 triệu</button>
+    <button class="filter-chip" data-filter="5to10m">5 - 10 triệu</button>
+    <button class="filter-chip" data-filter="over10m">Trên 10 triệu</button>
+  </div>
+
+  <!-- Sort bar -->
+  <div class="sort-bar">
+    <span class="sort-label">Sắp xếp theo</span>
+    <div class="sort-btns">
+      <button class="sort-btn active" data-sort="popular">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Phổ biến
+      </button>
+      <button class="sort-btn" data-sort="sale">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Khuyến mãi HOT
+      </button>
+      <button class="sort-btn" data-sort="price-asc">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        Giá Thấp - Cao
+      </button>
+      <button class="sort-btn" data-sort="price-desc">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        Giá Cao - Thấp
+      </button>
+    </div>
+  </div>
+
+  <!-- Product grid -->
+  <div class="product-grid" id="product-grid">
+    <!-- Skeleton placeholders while loading -->
+    <div class="skel-card">
+      <div class="skel-img skeleton"></div>
+      <div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line skel-short skeleton"></div><div class="skel-line skeleton"></div></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel-img skeleton"></div>
+      <div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line skel-short skeleton"></div><div class="skel-line skeleton"></div></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel-img skeleton"></div>
+      <div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line skel-short skeleton"></div><div class="skel-line skeleton"></div></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel-img skeleton"></div>
+      <div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line skel-short skeleton"></div><div class="skel-line skeleton"></div></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel-img skeleton"></div>
+      <div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line skel-short skeleton"></div><div class="skel-line skeleton"></div></div>
+    </div>
+  </div>
+
+  <!-- Load more -->
+  <div class="load-more-wrap" id="load-more-wrap" style="display:none">
+    <button class="btn-load-more" id="btn-load-more">
+      Xem thêm sản phẩm
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+</div>
+
+<!-- ════════ MODAL: Add/Edit Product ════════ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Thêm sản phẩm mới</span>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-doc-id" />
+      <div class="form-row">
+        <div class="form-group full">
+          <label>Tên sản phẩm *</label>
+          <input type="text" id="f-name" placeholder="iPhone 17 Pro 256GB | Chính hãng" />
+        </div>
+        <div class="form-group">
+          <label>Giá bán (VNĐ) *</label>
+          <input type="number" id="f-price" placeholder="34590000" />
+        </div>
+        <div class="form-group">
+          <label>Giá gốc (VNĐ)</label>
+          <input type="number" id="f-price-old" placeholder="34990000" />
+        </div>
+        <div class="form-group">
+          <label>Thương hiệu</label>
+          <select id="f-brand">
+            <option value="">-- Chọn --</option>
+            <option value="iphone">Apple (iPhone)</option>
+            <option value="samsung">Samsung</option>
+            <option value="oppo">OPPO</option>
+            <option value="xiaomi">Xiaomi</option>
+            <option value="vivo">Vivo</option>
+            <option value="other">Khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Trạng thái</label>
+          <select id="f-status">
+            <option value="">-- Không --</option>
+            <option value="new">Hàng mới về</option>
+            <option value="hot">Bán chạy</option>
+            <option value="sale">Đang giảm giá</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>RAM / Bộ nhớ</label>
+          <input type="text" id="f-ram" placeholder="8 GB" />
+        </div>
+        <div class="form-group">
+          <label>Dung lượng</label>
+          <input type="text" id="f-storage" placeholder="256 GB" />
+        </div>
+        <div class="form-group">
+          <label>Màn hình</label>
+          <input type="text" id="f-screen" placeholder="6.3 inches" />
+        </div>
+        <div class="form-group">
+          <label>Đánh giá (0-5)</label>
+          <input type="number" id="f-rating" min="0" max="5" step="0.1" placeholder="4.9" />
+        </div>
+        <div class="form-group full">
+          <label>Link ảnh sản phẩm (URL)</label>
+          <input type="url" id="f-image" placeholder="https://..." />
+        </div>
+        <div class="form-group full">
+          <label>Smember giảm (VD: 346.000đ)</label>
+          <input type="text" id="f-smember" placeholder="Smember giảm đến 346.000đ" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" id="modal-cancel">Hủy</button>
+      <button class="btn-modal-save" id="modal-save">💾 Lưu sản phẩm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc,
+    query, orderBy, limit, startAfter, serverTimestamp, where
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // ── Firebase init ──
+  const app = initializeApp({
+    apiKey:            "AIzaSyB-tBurz5gMYTB2VfU_KvAgO_54lOke9hQ",
+    authDomain:        "project-d8beb.firebaseapp.com",
+    projectId:         "project-d8beb",
+    storageBucket:     "project-d8beb.firebasestorage.app",
+    messagingSenderId: "367976119507",
+    appId:             "1:367976119507:web:ef78fe848b4ad45cb6a826",
+    measurementId:     "G-ZDNSN02HW8"
+  });
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  // ── State ──
+  let currentUser   = null;
+  let allProducts   = [];       // full list from Firestore
+  let filtered      = [];       // after filter/sort
+  let activeFilter  = "all";
+  let activeSort    = "popular";
+  const PAGE_SIZE   = 10;
+  let displayCount  = PAGE_SIZE;
+
+  // ── Auth ──
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    const iconBtn = document.getElementById("profile-icon-btn");
+    const avatar  = document.getElementById("nav-avatar");
+    const pdUser  = document.getElementById("pd-user");
+    const pdGuest = document.getElementById("pd-menu-guest");
+    const pdLogged= document.getElementById("pd-menu-user");
+    const adminBar= document.getElementById("admin-bar");
+
+    if (user) {
+      var n = user.displayName || user.email;
+      avatar.src = user.photoURL ||
+        "https://ui-avatars.com/api/?name=" + encodeURIComponent(n) + "&size=80&background=0057ff&color=fff";
+      iconBtn.classList.add("has-avatar");
+      pdUser.classList.add("show");
+      document.getElementById("pd-name").textContent  = n;
+      document.getElementById("pd-email").textContent = user.email || "";
+      pdGuest.style.display  = "none";
+      pdLogged.style.display = "block";
+      adminBar.classList.add("show");
+    } else {
+      iconBtn.classList.remove("has-avatar");
+      pdUser.classList.remove("show");
+      pdGuest.style.display  = "block";
+      pdLogged.style.display = "none";
+      adminBar.classList.remove("show");
+    }
+  });
+
+  document.getElementById("btn-signout").addEventListener("click", () => signOut(auth));
+
+  // ── Profile dropdown: click to toggle ──
+  const profileBtn      = document.getElementById("profile-icon-btn");
+  const profileDropdown = document.getElementById("profile-dropdown");
+
+  profileBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = profileDropdown.classList.contains("open");
+    profileDropdown.classList.toggle("open");
+    profileBtn.classList.toggle("active", !isOpen);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!profileDropdown.contains(e.target) && e.target !== profileBtn) {
+      profileDropdown.classList.remove("open");
+      profileBtn.classList.remove("active");
+    }
+  });
+
+  // ── Load products from Firestore ──
+  async function loadProducts() {
+    try {
+      const snap = await getDocs(collection(db, "products"));
+      allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      applyFilterSort();
+    } catch (err) {
+      console.error("Firestore read error:", err);
+      let hint = err.message;
+      if (err.code === "permission-denied") {
+        hint = 'Firestore Rules đang chặn. Vào Firebase Console → Firestore → Rules → cho phép read/write.';
+        showRulesError();
+      }
+      document.getElementById("product-grid").innerHTML =
+        `<div class="error-banner">⚠️ Không thể tải sản phẩm<br/><small>${hint}</small></div>`;
+      document.getElementById("product-count").textContent = "Lỗi tải dữ liệu";
+    }
+  }
+
+  // ── Filter + Sort ──
+  function applyFilterSort() {
+    // Filter
+    filtered = allProducts.filter(p => {
+      if (activeFilter === "all")     return true;
+      if (activeFilter === "under5m") return (p.price || 0) < 5000000;
+      if (activeFilter === "5to10m")  return (p.price || 0) >= 5000000 && (p.price || 0) <= 10000000;
+      if (activeFilter === "over10m") return (p.price || 0) > 10000000;
+      return (p.brand || "").toLowerCase() === activeFilter;
+    });
+
+    // Sort
+    if (activeSort === "price-asc")  filtered.sort((a,b) => (a.price||0) - (b.price||0));
+    if (activeSort === "price-desc") filtered.sort((a,b) => (b.price||0) - (a.price||0));
+    if (activeSort === "sale")       filtered.sort((a,b) => (b.discountPct||0) - (a.discountPct||0));
+    // "popular" = default Firestore order (no extra sort)
+
+    displayCount = PAGE_SIZE;
+    renderProducts();
+  }
+
+  // ── Render ──
+  function renderProducts() {
+    const grid  = document.getElementById("product-grid");
+    const count = document.getElementById("product-count");
+    const lmWrap= document.getElementById("load-more-wrap");
+
+    count.textContent = filtered.length + " sản phẩm";
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><div class="empty-ico">📦</div><h3>Chưa có sản phẩm nào</h3><p>Hãy thêm sản phẩm đầu tiên bằng nút "Thêm sản phẩm" ở trên</p></div>';
+      lmWrap.style.display = "none";
+      return;
+    }
+
+    const slice = filtered.slice(0, displayCount);
+    grid.innerHTML = slice.map(p => renderCard(p)).join("");
+
+    // Show/hide load more
+    lmWrap.style.display = displayCount < filtered.length ? "flex" : "none";
+
+    // Delete buttons (admin only)
+    if (currentUser) {
+      grid.querySelectorAll(".btn-delete").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (confirm("Xóa sản phẩm này?")) deleteProduct(btn.dataset.id);
+        });
+      });
+      grid.querySelectorAll(".btn-edit").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openEditModal(btn.dataset.id);
+        });
+      });
+    }
+  }
+
+  function fmtPrice(n) {
+    if (!n) return "";
+    return Number(n).toLocaleString("vi-VN") + "đ";
+  }
+
+  function discountPct(price, priceOld) {
+    if (!priceOld || !price || priceOld <= price) return 0;
+    return Math.round((1 - price / priceOld) * 100);
+  }
+
+  function renderCard(p) {
+    const disc   = discountPct(p.price, p.priceOld);
+    const rating = p.rating ? parseFloat(p.rating).toFixed(1) : null;
+    const adminBtns = currentUser ? `
+      <div style="display:flex;gap:4px;padding:8px 14px 0;justify-content:flex-end;">
+        <button class="btn-edit" data-id="${p.id}" style="font-size:0.7rem;padding:3px 8px;border:1px solid var(--g2);border-radius:5px;background:white;cursor:pointer;color:var(--blue);font-family:var(--font);">✏️ Sửa</button>
+        <button class="btn-delete" data-id="${p.id}" style="font-size:0.7rem;padding:3px 8px;border:1px solid #fcc;border-radius:5px;background:white;cursor:pointer;color:var(--red);font-family:var(--font);">🗑 Xóa</button>
+      </div>` : "";
+
+    return `
+    <div class="prod-card">
+      <div class="prod-badges">
+        ${disc > 0 ? `<span class="badge-discount">Giảm ${disc}%</span>` : '<span></span>'}
+        <span class="badge-installment">Trả góp 0%</span>
+      </div>
+      <div class="prod-img-wrap">
+        ${p.image
+          ? `<img class="prod-img" src="${p.image}" alt="${p.name || ''}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=prod-img-placeholder>📱</div>'" />`
+          : `<div class="prod-img-placeholder">📱</div>`
+        }
+      </div>
+      ${adminBtns}
+      <div class="prod-info">
+        <div class="prod-name">${p.name || 'Sản phẩm chưa có tên'}</div>
+        ${p.status ? `<span class="prod-status ${p.status}">${
+          p.status === 'new' ? 'Hàng mới về' :
+          p.status === 'hot' ? '🔥 Bán chạy' : '🏷 Đang giảm giá'
+        }</span>` : ''}
+        <div class="prod-price-row">
+          <span class="prod-price">${fmtPrice(p.price)}</span>
+          ${p.priceOld ? `<span class="prod-price-old">${fmtPrice(p.priceOld)}</span>` : ''}
+        </div>
+        <div class="prod-specs">
+          ${p.screen   ? `<span class="spec-chip">${p.screen}</span>` : ''}
+          ${p.ram      ? `<span class="spec-chip">${p.ram}</span>` : ''}
+          ${p.storage  ? `<span class="spec-chip">${p.storage}</span>` : ''}
+        </div>
+        ${p.smember ? `<div class="prod-smember">${p.smember}</div>` : ''}
+      </div>
+      <div class="prod-footer">
+        <div class="prod-stars">
+          ${rating ? `<span class="star-ico">★</span> ${rating}` : '<span style="color:var(--g2)">★★★★★</span>'}
+        </div>
+        <button class="prod-wishlist">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          Yêu thích
+        </button>
+      </div>
+    </div>`;
+  }
+
+  // ── Load more ──
+  document.getElementById("btn-load-more").addEventListener("click", () => {
+    displayCount += PAGE_SIZE;
+    renderProducts();
+  });
+
+  // ── Filter chips ──
+  document.querySelectorAll(".filter-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeFilter = chip.dataset.filter;
+      applyFilterSort();
+    });
+  });
+
+  // ── Sort buttons ──
+  document.querySelectorAll(".sort-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeSort = btn.dataset.sort;
+      applyFilterSort();
+    });
+  });
+
+  // ── Modal: Add product ──
+  const modalOverlay = document.getElementById("modal-overlay");
+
+  function openModal(title, data = {}) {
+    document.getElementById("modal-title").textContent = title;
+    document.getElementById("edit-doc-id").value = data.id || "";
+    document.getElementById("f-name").value       = data.name      || "";
+    document.getElementById("f-price").value      = data.price     || "";
+    document.getElementById("f-price-old").value  = data.priceOld  || "";
+    document.getElementById("f-brand").value      = data.brand     || "";
+    document.getElementById("f-status").value     = data.status    || "";
+    document.getElementById("f-ram").value        = data.ram       || "";
+    document.getElementById("f-storage").value    = data.storage   || "";
+    document.getElementById("f-screen").value     = data.screen    || "";
+    document.getElementById("f-rating").value     = data.rating    || "";
+    document.getElementById("f-image").value      = data.image     || "";
+    document.getElementById("f-smember").value    = data.smember   || "";
+    modalOverlay.classList.add("open");
+  }
+
+  function openEditModal(id) {
+    const p = allProducts.find(x => x.id === id);
+    if (p) openModal("Chỉnh sửa sản phẩm", p);
+  }
+
+  document.getElementById("btn-open-modal").addEventListener("click", () => openModal("Thêm sản phẩm mới"));
+  document.getElementById("modal-close").addEventListener("click",  () => modalOverlay.classList.remove("open"));
+  document.getElementById("modal-cancel").addEventListener("click", () => modalOverlay.classList.remove("open"));
+  modalOverlay.addEventListener("click", e => { if (e.target === modalOverlay) modalOverlay.classList.remove("open"); });
+
+  // ── Save product ──
+  document.getElementById("modal-save").addEventListener("click", async () => {
+    const name = document.getElementById("f-name").value.trim();
+    const price = parseFloat(document.getElementById("f-price").value);
+    if (!name)      { showToast("Vui lòng nhập tên sản phẩm", "error"); return; }
+    if (isNaN(price)) { showToast("Vui lòng nhập giá hợp lệ", "error"); return; }
+
+    const data = {
+      name,
+      price,
+      priceOld:   parseFloat(document.getElementById("f-price-old").value) || null,
+      brand:      document.getElementById("f-brand").value   || "",
+      status:     document.getElementById("f-status").value  || "",
+      ram:        document.getElementById("f-ram").value.trim()     || "",
+      storage:    document.getElementById("f-storage").value.trim() || "",
+      screen:     document.getElementById("f-screen").value.trim()  || "",
+      rating:     parseFloat(document.getElementById("f-rating").value) || null,
+      image:      document.getElementById("f-image").value.trim()   || "",
+      smember:    document.getElementById("f-smember").value.trim() || "",
+      updatedAt:  serverTimestamp(),
+    };
+
+    const saveBtn = document.getElementById("modal-save");
+    saveBtn.disabled = true; saveBtn.textContent = "Đang lưu...";
+
+    try {
+      const docId = document.getElementById("edit-doc-id").value;
+      if (docId) {
+        await updateDoc(doc(db, "products", docId), data);
+        showToast("✅ Đã cập nhật sản phẩm!", "success");
+      } else {
+        data.createdAt = serverTimestamp();
+        await addDoc(collection(db, "products"), data);
+        showToast("✅ Đã thêm sản phẩm vào Firestore!", "success");
+      }
+      modalOverlay.classList.remove("open");
+      await loadProducts();
+    } catch (err) {
+      console.error("Firestore write error:", err);
+      let msg = err.message;
+      if (err.code === "permission-denied") {
+        msg = "❌ Firestore từ chối quyền ghi.\n\nVào Firebase Console → Firestore → Rules → đổi thành:\nallow read, write: if true;";
+        showRulesError();
+      } else if (err.code === "unauthenticated") {
+        msg = "❌ Bạn cần đăng nhập trước.";
+      } else if (err.code === "unavailable") {
+        msg = "❌ Không kết nối được Firestore. Kiểm tra internet.";
+      }
+      showToast(msg.split("\n")[0], "error");
+    }
+
+    saveBtn.disabled = false; saveBtn.textContent = "💾 Lưu sản phẩm";
+  });
+
+  // ── Delete product ──
+  async function deleteProduct(id) {
+    try {
+      await deleteDoc(doc(db, "products", id));
+      showToast("✅ Đã xóa sản phẩm", "success");
+      await loadProducts();
+    } catch (err) {
+      if (err.code === "permission-denied") {
+        showRulesError();
+        showToast("❌ Firestore chặn quyền xóa. Xem hướng dẫn bên dưới.", "error");
+      } else {
+        showToast("Lỗi xóa: " + err.message, "error");
+      }
+    }
+  }
+
+  // ── Search overlay ──
+  var overlay = document.getElementById("search-overlay");
+  document.getElementById("btn-search").addEventListener("click", () => {
+    overlay.classList.add("open");
+    document.getElementById("search-input").focus();
+  });
+  document.getElementById("search-close").addEventListener("click", () => overlay.classList.remove("open"));
+  overlay.addEventListener("click", e => { if (e.target === overlay) overlay.classList.remove("open"); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") overlay.classList.remove("open"); });
+  document.querySelectorAll(".search-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.getElementById("search-input").value = t.textContent;
+    });
+  });
+
+  // ── Toast ──
+  function showToast(msg, type) {
+    const wrap = document.getElementById("toast-wrap");
+    const t = document.createElement("div");
+    t.className = "toast " + (type || "success");
+    t.textContent = msg;
+    wrap.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 400); }, 3500);
+  }
+
+  // ── Rules error banner ──
+  function showRulesError() {
+    const existing = document.getElementById("rules-error-banner");
+    if (existing) return;
+    const banner = document.createElement("div");
+    banner.id = "rules-error-banner";
+    banner.style.cssText = `
+      position:fixed; bottom:24px; left:24px; right:80px; z-index:998;
+      background:#fff; border:2px solid #e53935; border-radius:14px;
+      padding:20px 24px; box-shadow:0 12px 40px rgba(0,0,0,0.15);
+      max-width:520px;
+    `;
+    banner.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div>
+          <div style="font-weight:700;color:#c62828;font-size:0.95rem;margin-bottom:10px;">
+            🔒 Firestore chặn quyền ghi
+          </div>
+          <div style="font-size:0.82rem;color:#555;line-height:1.7;">
+            Vào <b>Firebase Console</b> → <b>Firestore Database</b> → tab <b>Rules</b> → đổi thành:
+          </div>
+          <pre style="background:#f4f4f4;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:0.78rem;color:#1a1a2e;overflow-x:auto;">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}</pre>
+          <div style="font-size:0.78rem;color:#888;">Rules này cho phép user đã đăng nhập đọc/ghi toàn bộ.</div>
+        </div>
+        <button onclick="document.getElementById('rules-error-banner').remove()"
+          style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#aaa;flex-shrink:0;padding:0;">✕</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+  }
+
+  // ── Init ──
+  loadProducts();
+</script>
+</body>
+</html>
