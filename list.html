@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tech Shop — Điện thoại</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="search.css" />
   <style>
     :root {
       --black:#0d0d0d;--white:#fff;--g1:#f6f6f8;--g2:#e9e9ef;--g3:#b2b2c0;
@@ -297,6 +298,7 @@
     <div class="search-input-wrap">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" class="search-input" placeholder="Tìm kiếm sản phẩm..." id="search-input" />
+      <button type="button" class="search-submit" id="search-submit">Tìm</button>
       <button class="search-close" id="search-close">✕</button>
     </div>
     <div class="search-hints">
@@ -446,6 +448,7 @@
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script type="module">
+import "./search-nav.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -530,14 +533,6 @@ document.addEventListener("click", e => {
     profileBtn.classList.remove("active");
   }
 });
-
-// ── SEARCH ──
-const searchOverlay = document.getElementById("search-overlay");
-document.getElementById("btn-search").addEventListener("click", () => { searchOverlay.classList.add("open"); document.getElementById("search-input").focus(); });
-document.getElementById("search-close").addEventListener("click", () => searchOverlay.classList.remove("open"));
-searchOverlay.addEventListener("click", e => { if (e.target === searchOverlay) searchOverlay.classList.remove("open"); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") searchOverlay.classList.remove("open"); });
-document.querySelectorAll(".search-tag").forEach(t => t.addEventListener("click", () => { document.getElementById("search-input").value = t.textContent; }));
 
 // ── LOAD PRODUCTS ──
 async function loadProducts() {

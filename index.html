@@ -8,6 +8,7 @@
       href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="search.css" />
     <style>
       :root {
         --black: #0d0d0d;
@@ -519,6 +520,104 @@
       }
 
       /* ──────────────────────────────────────────
+       SPOTLIGHT STRIP (3 picks under navbar)
+    ────────────────────────────────────────── */
+      .spot-strip {
+        position: relative;
+        z-index: 1;
+        background: var(--white);
+        border-bottom: 1px solid var(--g2);
+      }
+      .spot-strip-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .spot-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 18px 20px 22px;
+        border-right: 1px solid var(--g2);
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.2s ease;
+      }
+      .spot-card:last-child {
+        border-right: none;
+      }
+      .spot-card:hover {
+        background: var(--g1);
+      }
+      .spot-card-img-wrap {
+        width: 100%;
+        max-width: 220px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+      .spot-card-img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.08));
+        transition: transform 0.25s ease;
+      }
+      .spot-card:hover .spot-card-img {
+        transform: scale(1.04);
+      }
+      .spot-card-name {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+        line-height: 1.35;
+        margin-bottom: 4px;
+      }
+      .spot-card-hint {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--blue);
+      }
+
+      @media (max-width: 720px) {
+        .spot-strip-inner {
+          padding: 0 16px;
+          grid-template-columns: 1fr;
+        }
+        .spot-card {
+          border-right: none;
+          border-bottom: 1px solid var(--g2);
+          flex-direction: row;
+          text-align: left;
+          align-items: center;
+          gap: 16px;
+          padding: 14px 0;
+        }
+        .spot-card:last-child {
+          border-bottom: none;
+        }
+        .spot-card-img-wrap {
+          flex-shrink: 0;
+          width: 120px;
+          max-width: 120px;
+          height: 100px;
+          margin-bottom: 0;
+        }
+        .spot-card-body {
+          flex: 1;
+          min-width: 0;
+        }
+      }
+
+      /* ──────────────────────────────────────────
        HERO  (full-width gradient, text left, floating product right)
     ────────────────────────────────────────── */
       .hero {
@@ -803,6 +902,189 @@
       }
 
       /* ──────────────────────────────────────────
+       FEATURED PRODUCT TYPES
+    ────────────────────────────────────────── */
+      .feat-types {
+        background: linear-gradient(180deg, var(--white) 0%, var(--g1) 45%, var(--g1) 100%);
+        border-bottom: 1px solid var(--g2);
+        padding: 52px 0 60px;
+      }
+      .feat-types-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      .feat-types-head {
+        text-align: center;
+        margin-bottom: 36px;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .feat-types-kicker {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 10px;
+      }
+      .feat-types-title {
+        font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+      .feat-types-sub {
+        font-size: 0.9rem;
+        color: var(--g4);
+        line-height: 1.55;
+      }
+      .feat-types-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+      .ft-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px 22px 20px;
+        border-radius: 16px;
+        border: 1px solid var(--g2);
+        background: var(--white);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        transition:
+          transform 0.22s ease,
+          box-shadow 0.22s ease,
+          border-color 0.2s;
+        overflow: hidden;
+        min-height: 168px;
+      }
+      .ft-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.55;
+        pointer-events: none;
+        transition: opacity 0.22s;
+      }
+      .ft-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 40px rgba(0, 87, 255, 0.12);
+        border-color: rgba(0, 87, 255, 0.25);
+      }
+      .ft-card:hover::before {
+        opacity: 0.75;
+      }
+      .ft-card--a::before {
+        background: linear-gradient(135deg, rgba(0, 87, 255, 0.09) 0%, transparent 55%);
+      }
+      .ft-card--b::before {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 55%);
+      }
+      .ft-card--c::before {
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, transparent 55%);
+      }
+      .ft-card--d::before {
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, transparent 55%);
+      }
+      .ft-card--e::before {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.09) 0%, transparent 55%);
+      }
+      .ft-card--f::before {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, transparent 55%);
+      }
+      .ft-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100%;
+        gap: 12px;
+        position: relative;
+        z-index: 1;
+      }
+      .ft-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: var(--g1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.55rem;
+        line-height: 1;
+        border: 1px solid var(--g2);
+      }
+      .ft-card-badge {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 4px 9px;
+        border-radius: 6px;
+        background: var(--black);
+        color: white;
+        white-space: nowrap;
+      }
+      .ft-card-badge--soft {
+        background: rgba(0, 87, 255, 0.12);
+        color: var(--blue);
+      }
+      .ft-card-body {
+        position: relative;
+        z-index: 1;
+        margin-top: 14px;
+        flex: 1;
+      }
+      .ft-card-title {
+        font-size: 1.02rem;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+        margin-bottom: 6px;
+      }
+      .ft-card-desc {
+        font-size: 0.82rem;
+        color: var(--g4);
+        line-height: 1.45;
+      }
+      .ft-card-link {
+        position: relative;
+        z-index: 1;
+        margin-top: 14px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--blue);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: gap 0.2s ease;
+      }
+      .ft-card:hover .ft-card-link {
+        gap: 8px;
+      }
+
+      @media (max-width: 1024px) {
+        .feat-types-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 520px) {
+        .feat-types {
+          padding: 40px 0 48px;
+        }
+        .feat-types-inner {
+          padding: 0 16px;
+        }
+        .feat-types-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ──────────────────────────────────────────
        DASHBOARD (when logged in)
     ────────────────────────────────────────── */
 
@@ -1064,6 +1346,57 @@
       </div>
     </nav>
 
+    <!-- 3 sản phẩm nổi bật (dưới navbar) -->
+    <div class="spot-strip" aria-label="Sản phẩm gợi ý">
+      <div class="spot-strip-inner">
+        <a href="list.html" class="spot-card">
+          <div class="spot-card-img-wrap">
+            <img
+              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/9/x9_1-1_1_1.jpg"
+              alt="OPPO Find X9"
+              class="spot-card-img"
+              width="220"
+              height="358"
+            />
+          </div>
+          <div class="spot-card-body">
+            <div class="spot-card-name">OPPO Find X9</div>
+            <span class="spot-card-hint">Điện thoại · Xem danh sách</span>
+          </div>
+        </a>
+        <a href="list-tablet.html" class="spot-card">
+          <div class="spot-card-img-wrap">
+            <img
+              src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/a/p/apple-ipad-air-m4-11-inch-128gb-wifi-1_1.jpg"
+              alt="iPad Air M4"
+              class="spot-card-img"
+              width="358"
+              height="358"
+            />
+          </div>
+          <div class="spot-card-body">
+            <div class="spot-card-name">iPad Air M4</div>
+            <span class="spot-card-hint">Máy tính bảng · Xem danh sách</span>
+          </div>
+        </a>
+        <a href="list-tai-nghe.html" class="spot-card">
+          <div class="spot-card-img-wrap">
+            <img
+              src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/t/a/tai-nghe-bluetooth-bose-quietcomfort-ultra-earbuds-2_19__1.png"
+              alt="Bose QuietComfort Ultra Earbuds 2"
+              class="spot-card-img"
+              width="358"
+              height="358"
+            />
+          </div>
+          <div class="spot-card-body">
+            <div class="spot-card-name">Bose QuietComfort Ultra 2</div>
+            <span class="spot-card-hint">Tai nghe · Xem danh sách</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
     <!-- Search overlay -->
     <div class="search-overlay" id="search-overlay">
       <div class="search-box">
@@ -1078,6 +1411,9 @@
             placeholder="Tìm kiếm sản phẩm..."
             id="search-input"
           />
+          <button type="button" class="search-submit" id="search-submit">
+            Tìm
+          </button>
           <button class="search-close" id="search-close">✕</button>
         </div>
         <div class="search-hints">
@@ -1096,74 +1432,105 @@
 
     <!-- ═══════ GUEST SECTION ═══════ -->
     <section id="sec-guest" style="display: block">
-      <!-- HERO BANNER -->
-      <div class="hero">
-        <div class="hero-inner">
-          <!-- LEFT: text -->
-          <div class="hero-text">
-            <span class="hero-tag">✦ Tech Shop AI Phone</span>
-            <h1 class="hero-title">
-              Tech Shop<br />
-              Reno15 Series <span class="sup-txt">5G</span>
-            </h1>
-            <p class="hero-desc">
-              Camera Selfie Góc Siêu Rộng 50MP<br />
-              Chân Dung Tele 3.5x &nbsp;|&nbsp; Pin Siêu Lớn 7000mAh
-            </p>
-            <div class="hero-btns">
-              <a href="#" class="btn-cta-fill">Xem thêm</a>
-              <a href="#" class="btn-cta-text">Mua ngay →</a>
-            </div>
-          </div>
-
-          <!-- RIGHT: product image -->
-          <div class="hero-visual">
-            <img
-              src="../images/phone-hero.png"
-              alt="OPPO Find X9 Series"
-              class="hero-phone-img"
-            />
-
-            <div class="chip-float chip-a">
-              <div class="cf-val">50MP</div>
-              <div class="cf-lbl">Selfie AI</div>
-            </div>
-            <div class="chip-float chip-b">
-              <div class="cf-val">7000</div>
-              <div class="cf-lbl">mAh Battery</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide dots -->
-        <div class="hero-dots">
-          <div class="hd on"></div>
-          <div class="hd"></div>
-          <div class="hd"></div>
-        </div>
-      </div>
 
       <!-- CATEGORY BAR -->
-      <div class="catbar">
-        <div class="catbar-inner">
-          <a href="list.html" class="cat-btn on"><span>📱</span>Điện Thoại</a>
-          <a href="#" class="cat-btn"><span>💻</span>Laptop</a>
-          <a href="list-tablet.html" class="cat-btn"
-            ><span>📟</span>Máy Tính Bảng</a
-          >
-          <a href="list-tai-nghe.html" class="cat-btn"
-            ><span>🎧</span>Tai Nghe</a
-          >
-          <a href="list-dong-ho.html" class="cat-btn"><span>⌚</span>Đồng Hồ</a>
-          <a href="#" class="cat-btn"><span>🖥️</span>Màn Hình</a>
-          <a href="#" class="cat-btn"><span>⌨️</span>Bàn Phím</a>
-          <a href="list-phu-kien.html" class="cat-btn"
-            ><span>🔋</span>Sạc & Cáp</a
-          >
-          <a href="#" class="cat-btn"><span>🎮</span>Gaming</a>
-          <a href="#" class="cat-btn"><span>📷</span>Máy Ảnh</a>
+
+
+      <!-- DẠNG SẢN PHẨM NỔI BẬT -->
+      <section class="feat-types" aria-labelledby="feat-types-title">
+        <div class="feat-types-inner">
+          <header class="feat-types-head">
+            <p class="feat-types-kicker">Gợi ý cho bạn</p>
+            <h2 id="feat-types-title" class="feat-types-title">
+              Dạng sản phẩm nổi bật
+            </h2>
+            <p class="feat-types-sub">
+              Các nhóm hàng được tìm kiếm nhiều — ưu đãi, bảo hành và giao hàng
+              nhanh trên toàn quốc.
+            </p>
+          </header>
+          <div class="feat-types-grid">
+            <a href="list.html" class="ft-card ft-card--a">
+              <div class="ft-card-top">
+                <span class="ft-card-icon" aria-hidden="true">📱</span>
+                <span class="ft-card-badge">Bán chạy</span>
+              </div>
+              <div class="ft-card-body">
+                <h3 class="ft-card-title">Điện thoại 5G & flagship</h3>
+                <p class="ft-card-desc">
+                  iPhone, Samsung Galaxy, OPPO, Xiaomi — đủ series mới nhất.
+                </p>
+              </div>
+              <span class="ft-card-link">Khám phá</span>
+            </a>
+            <a href="#" class="ft-card ft-card--b">
+              <div class="ft-card-top">
+                <span class="ft-card-icon" aria-hidden="true">💻</span>
+                <span class="ft-card-badge ft-card-badge--soft">Work &amp; game</span>
+              </div>
+              <div class="ft-card-body">
+                <h3 class="ft-card-title">Laptop &amp; máy tính xách tay</h3>
+                <p class="ft-card-desc">
+                  Mỏng nhẹ văn phòng, hiệu năng đồ họa và dòng gaming.
+                </p>
+              </div>
+              <span class="ft-card-link">Khám phá</span>
+            </a>
+            <a href="list-tablet.html" class="ft-card ft-card--c">
+              <div class="ft-card-top">
+                <span class="ft-card-icon" aria-hidden="true">📟</span>
+                <span class="ft-card-badge ft-card-badge--soft">Học tập</span>
+              </div>
+              <div class="ft-card-body">
+                <h3 class="ft-card-title">Máy tính bảng</h3>
+                <p class="ft-card-desc">
+                  iPad, Samsung Tab, Xiaomi Pad — màn lớn, bút vẽ, đa nhiệm.
+                </p>
+              </div>
+              <span class="ft-card-link">Khám phá</span>
+            </a>
+            <a href="list-tai-nghe.html" class="ft-card ft-card--d">
+              <div class="ft-card-top">
+                <span class="ft-card-icon" aria-hidden="true">🎧</span>
+                <span class="ft-card-badge">True Wireless</span>
+              </div>
+              <div class="ft-card-body">
+                <h3 class="ft-card-title">Tai nghe &amp; âm thanh</h3>
+                <p class="ft-card-desc">
+                  Over-ear, in-ear, chống ồn chủ động và gaming có mic.
+                </p>
+              </div>
+              <span class="ft-card-link">Khám phá</span>
+            </a>
+            <a href="list-dong-ho.html" class="ft-card ft-card--e">
+              <div class="ft-card-top">
+                <span class="ft-card-icon" aria-hidden="true">⌚</span>
+                <span class="ft-card-badge ft-card-badge--soft">Sức khỏe</span>
+              </div>
+              <div class="ft-card-body">
+                <h3 class="ft-card-title">Đồng hồ thông minh</h3>
+                <p class="ft-card-desc">
+                  Theo dõi vận động, nhịp tim, thông báo — pin bền cả ngày.
+                </p>
+              </div>
+              <span class="ft-card-link">Khám phá</span>
+            </a>
+            <a href="list-phu-kien.html" class="ft-card ft-card--f">
+              <div class="ft-card-top">
+                <span class="ft-card-icon" aria-hidden="true">🔌</span>
+                <span class="ft-card-badge ft-card-badge--soft">Tiện ích</span>
+              </div>
+              <div class="ft-card-body">
+                <h3 class="ft-card-title">Sạc, cáp &amp; phụ kiện</h3>
+                <p class="ft-card-desc">
+                  Sạc nhanh GaN, ốp lưng, kính cường lực và hub kết nối.
+                </p>
+              </div>
+              <span class="ft-card-link">Khám phá</span>
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
     </section>
 
     <!-- FOOTER -->
@@ -1177,6 +1544,7 @@
     </footer>
 
     <script type="module">
+      import "./search-nav.js";
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import {
         getAuth,
@@ -1260,30 +1628,6 @@
           profileDropdown.classList.remove("open");
           profileBtn.classList.remove("active");
         }
-      });
-
-      // ── Search overlay ──
-      var overlay = document.getElementById("search-overlay");
-      document.getElementById("btn-search").addEventListener("click", () => {
-        overlay.classList.add("open");
-        document.getElementById("search-input").focus();
-      });
-      document.getElementById("search-close").addEventListener("click", () => {
-        overlay.classList.remove("open");
-      });
-      overlay.addEventListener("click", (e) => {
-        if (e.target === overlay) overlay.classList.remove("open");
-      });
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") overlay.classList.remove("open");
-      });
-
-      // Search tags fill input
-      document.querySelectorAll(".search-tag").forEach((t) => {
-        t.addEventListener("click", () => {
-          document.getElementById("search-input").value = t.textContent;
-          document.getElementById("search-input").focus();
-        });
       });
 
       // ── Slide dots ──
