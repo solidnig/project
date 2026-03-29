@@ -21,13 +21,13 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebas
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD3BCNxZMEQxLcgn9RQkYQU4BvbDF64c_4",
-  authDomain: "meetme-918cd.firebaseapp.com",
-  projectId: "meetme-918cd",
-  storageBucket: "meetme-918cd.firebasestorage.app",
-  messagingSenderId: "83399029367",
-  appId: "1:83399029367:web:e91b867e01ea213e004c72",
-  measurementId: "G-1PRVJCE9GW",
+  apiKey: "AIzaSyB-tBurz5gMYTB2VfU_KvAgO_54lOke9hQ",
+  authDomain: "project-d8beb.firebaseapp.com",
+  projectId: "project-d8beb",
+  storageBucket: "project-d8beb.firebasestorage.app",
+  messagingSenderId: "367976119507",
+  appId: "1:367976119507:web:ef78fe848b4ad45cb6a826",
+  measurementId: "G-ZDNSN02HW8",
 };
 
 const app = initializeApp(firebaseConfig);
